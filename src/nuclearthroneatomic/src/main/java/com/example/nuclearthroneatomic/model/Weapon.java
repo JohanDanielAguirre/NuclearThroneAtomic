@@ -1,4 +1,4 @@
-package model;
+package com.example.nuclearthroneatomic.model;
 public class Weapon {
     private int damage;
     private int munition;
