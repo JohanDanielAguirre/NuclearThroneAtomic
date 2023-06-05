@@ -32,7 +32,7 @@ public class StartController implements Initializable {
     }
 
     private void printImage(){
-        String uri = "file:"+ HelloApplication.class.getResource("icesigood.png").getPath();;
+        String uri = "file:"+ HelloApplication.class.getResource("icesigood.png").getPath();
         gc.drawImage(new Image(uri),0,0,600,400);
     }
 

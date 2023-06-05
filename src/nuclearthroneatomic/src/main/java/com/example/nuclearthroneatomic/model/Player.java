@@ -1,6 +1,7 @@
 package com.example.nuclearthroneatomic.model;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.component.Component;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 
 public class Player extends Component {
@@ -12,7 +13,9 @@ public class Player extends Component {
     private Weapon weapon2;
     private Power p;
 
-    public Player(int positionx, int positiony, int speed, int health, Weapon weapon1, Weapon weapon2, Power p) {
+    private Image avatar;
+
+    public Player(int positionx, int positiony, int speed, int health, Weapon weapon1, Weapon weapon2, Power p, Image avatar) {
         this.positionx = positionx;
         this.positiony = positiony;
         this.speed = speed;
@@ -77,6 +80,14 @@ public class Player extends Component {
 
     public void setP(Power p) {
         this.p = p;
+    }
+
+    public Image getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(Image avatar) {
+        this.avatar = avatar;
     }
 
     @Override
