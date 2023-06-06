@@ -1,9 +1,25 @@
 package model;
 import com.almasb.fxgl.dsl.FXGL;
+import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.entity.EntityFactory;
+import com.almasb.fxgl.entity.SpawnData;
+import com.almasb.fxgl.entity.Spawns;
 import com.almasb.fxgl.entity.component.Component;
+import com.almasb.fxgl.physics.PhysicsComponent;
+import com.almasb.fxgl.physics.box2d.dynamics.BodyType;
+import com.almasb.fxgl.texture.AnimatedTexture;
+import com.almasb.fxgl.texture.AnimationChannel;
+import com.almasb.fxgl.texture.ImagesKt;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
+import javafx.util.Duration;
 
-public class Player extends Component {
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
+
+public class Player extends Entity {
     private int positionx;
     private int positiony;
     private int speed;
@@ -11,6 +27,8 @@ public class Player extends Component {
     private Weapon weapon1;
     private Weapon weapon2;
     private Power p;
+
+    static boolean isMoving;
 
     public Player(int positionx, int positiony, int speed, int health, Weapon weapon1, Weapon weapon2, Power p) {
         this.positionx = positionx;
@@ -22,6 +40,8 @@ public class Player extends Component {
         this.p = p;
     }
 
+    public Player() {
+    }
 
     public int getPositionx() {
         return positionx;
@@ -77,21 +97,5 @@ public class Player extends Component {
 
     public void setP(Power p) {
         this.p = p;
-    }
-
-    @Override
-    public void onUpdate(double tpf) {
-        if (FXGL.getInput().equals(KeyCode.W)) {
-            entity.translateY(-speed);
-        }
-        if (FXGL.getInput().equals(KeyCode.S)) {
-            entity.translateY(speed);
-        }
-        if (FXGL.getInput().equals(KeyCode.A)) {
-            entity.translateX(-speed);
-        }
-        if (FXGL.getInput().equals(KeyCode.D)) {
-            entity.translateX(speed);
-        }
     }
 }
