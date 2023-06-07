@@ -27,8 +27,13 @@ public class PlayerControl extends Component {
     private boolean isMoving;
     private boolean isFacingRight;
 
-    private int life;
+    private int hp=3;
 
+    private int uhpc=3;
+
+    private  long time = 0;
+
+    private  int luckuses=1;
 
     public PlayerControl(AnimatedTexture texture) {
         this.bbox = new BoundingBoxComponent();
@@ -49,29 +54,6 @@ public class PlayerControl extends Component {
     }
     @Override
     public void onUpdate(double tpf) {
-
-        double screenWidth = getAppWidth();
-        double screenHeight = getAppHeight();
-
-        double minX = 0;
-        double minY = 0;
-        double maxX = screenWidth - entity.getWidth();
-        double maxY = screenHeight - entity.getHeight();
-
-        double playerX = entity.getX();
-        double playerY = entity.getY();
-
-        if (playerX < minX) {
-            entity.setX(minX);
-        } else if (playerX > maxX) {
-            entity.setX(maxX);
-        }
-
-        if (playerY < minY+40) {
-            entity.setY(minY+40);
-        } else if (playerY > maxY-40) {
-            entity.setY(maxY-40);
-        }
         if (isMoving) {
             if (!texture.getAnimationChannel().equals(animWalk)) {
                 texture.loopAnimationChannel(animWalk);
@@ -100,6 +82,9 @@ public class PlayerControl extends Component {
                 getGameWorld().addEntity(weapon);
             }
         }
+        if(System.currentTimeMillis()-time>7000){
+            hp=3;
+        }
     }
     public void moveRight() {
         entity.translateX(5);
@@ -124,6 +109,21 @@ public class PlayerControl extends Component {
         entity.translateY(5);
         isMoving=true;
     }
+
+    public void health(){
+        if(uhpc>0){
+            hp=3;
+            --uhpc;
+        }
+    }
+
+    public void lucky(){
+        if(luckuses>0){
+            time=System.currentTimeMillis();
+            hp=999999;
+            --luckuses;
+        }
+    }
     public void reload() {
         getGameTimer().runOnceAfter(() -> {
             PlayerWeaponComponent weaponComponent= getEntity().getComponent(PlayerWeaponComponent.class);
@@ -147,11 +147,5 @@ public class PlayerControl extends Component {
             isFacingRight=false;
             texture.setScaleX(-1);
         }
-    }
-    public double getPosX(){
-        return entity.getX();
-    }
-    public double getPosY(){
-        return entity.getY();
     }
 }

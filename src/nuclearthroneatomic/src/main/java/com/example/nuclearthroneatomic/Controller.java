@@ -57,6 +57,19 @@ import static com.almasb.fxgl.dsl.FXGL.*;
         }
         @Override
         protected void initInput() {
+
+            getInput().addAction(new UserAction("lucky") {
+                @Override
+                protected void onAction() {
+                    player.getComponent(PlayerControl.class).lucky();
+                }
+            }, KeyCode.Q);
+            getInput().addAction(new UserAction("health") {
+                @Override
+                protected void onAction() {
+                    player.getComponent(PlayerControl.class).health();
+                }
+            }, KeyCode.F);
             getInput().addAction(new UserAction("Right") {
                 @Override
                 protected void onAction() {
