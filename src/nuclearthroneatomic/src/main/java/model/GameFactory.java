@@ -73,6 +73,7 @@ public class GameFactory implements EntityFactory {
                 .scale(0.15,0.15)
                 .with(new CollidableComponent(true))
                 .with(new OffscreenCleanComponent())
+                .at(random(0,500),random(0,500))
                 .build();
     }
     @Spawns("Bullet")
@@ -133,8 +134,5 @@ public class GameFactory implements EntityFactory {
         return wall;
     }
 
-    @Spawns("Enemy")
-    private static Entity spawnEnemy(SpawnData data){
-       return null;
-    }
+
 }

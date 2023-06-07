@@ -20,6 +20,7 @@ import static com.almasb.fxgl.dsl.FXGL.*;
             settings.setMainMenuEnabled(true);
             settings.setGameMenuEnabled(true);
             settings.setIntroEnabled(true);
+            settings.setFullScreenAllowed(true);
         }
         @Override
         protected void initGame() {
