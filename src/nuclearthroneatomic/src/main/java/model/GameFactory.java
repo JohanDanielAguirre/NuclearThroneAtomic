@@ -122,4 +122,9 @@ public class GameFactory implements EntityFactory {
         getGameWorld().addEntity(wall);
         return wall;
     }
+
+    @Spawns("Enemy")
+    private static Entity spawnEnemy(SpawnData data){
+       return null;
+    }
 }

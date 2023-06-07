@@ -16,6 +16,10 @@ import static com.almasb.fxgl.dsl.FXGL.*;
         public static boolean isRealoding;
         @Override
         protected void initSettings(GameSettings settings) {
+            settings.setTitle("Nuclear Throne Atomic");
+            settings.setMainMenuEnabled(true);
+            settings.setGameMenuEnabled(true);
+            settings.setIntroEnabled(true);
         }
         @Override
         protected void initGame() {

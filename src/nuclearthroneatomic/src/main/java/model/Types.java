@@ -1,5 +1,5 @@
 package model;
 
 public enum Types {
-    PLAYER, WEAPON,BULLET,WALL
+    PLAYER, WEAPON,BULLET,WALL,ENEMY
 }
