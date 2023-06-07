@@ -27,6 +27,7 @@ import static com.almasb.fxgl.dsl.FXGL.*;
             player = spawn("Avatar", getAppWidth() / 2 - 15, getAppHeight() / 2 - 15);
             spawn("Weapon");
             spawn("Weapon2");
+            spawn("enemy");
             GameFactory.generateSurroundingWalls();
         }
         @Override

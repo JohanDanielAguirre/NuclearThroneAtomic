@@ -65,6 +65,16 @@ public class GameFactory implements EntityFactory {
                 .at(random(0,500),random(0,500))
                 .build();
     }
+    @Spawns("enemy")
+    public Entity newEnemy(SpawnData data) {
+        return entityBuilder()
+                .type(Types.ENEMY)
+                .viewWithBBox("enemy.png")
+                .scale(0.15,0.15)
+                .with(new CollidableComponent(true))
+                .with(new OffscreenCleanComponent())
+                .build();
+    }
     @Spawns("Bullet")
     public Entity newBullet(SpawnData data) {
         Entity player = getGameWorld().getSingleton(Types.PLAYER);

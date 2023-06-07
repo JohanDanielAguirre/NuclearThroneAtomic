@@ -1,19 +1,19 @@
 package model;
 
-import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
-import com.almasb.fxgl.entity.component.Component;
-import com.almasb.fxgl.entity.components.BoundingBoxComponent;
-import com.almasb.fxgl.texture.AnimatedTexture;
-import com.almasb.fxgl.texture.AnimationChannel;
 import javafx.geometry.Point2D;
-import javafx.scene.image.Image;
-import javafx.util.Duration;
-
-import java.util.ArrayList;
-
-import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameWorld;
-import static com.almasb.fxgl.dsl.FXGLForKtKt.getInput;
+        import com.almasb.fxgl.dsl.FXGL;
+        import com.almasb.fxgl.entity.Entity;
+        import com.almasb.fxgl.entity.component.Component;
+        import com.almasb.fxgl.entity.components.BoundingBoxComponent;
+        import com.almasb.fxgl.texture.AnimatedTexture;
+        import com.almasb.fxgl.texture.AnimationChannel;
+        import javafx.geometry.Point2D;
+        import javafx.scene.image.Image;
+        import javafx.util.Duration;
+        import java.util.ArrayList;
+        import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameWorld;
+        import static com.almasb.fxgl.dsl.FXGLForKtKt.getInput;
 
 public class Enemycontrol  extends Component {
     private AnimationChannel animIdle, animWalk;
@@ -21,11 +21,11 @@ public class Enemycontrol  extends Component {
     private BoundingBoxComponent bbox;
     private boolean isMoving;
     private boolean isFacingRight;
-    private static int life=3;
+    private static int life = 3;
 
     public Enemycontrol(AnimatedTexture texture) {
         this.bbox = new BoundingBoxComponent();
-        this.texture =texture;
+        this.texture = texture;
         var imagesIdle = new ArrayList<Image>();
         for (int i = 1; i <= 4; i++) {
             String imagePath = "Avatar/1-Idle/" + i + ".png";
@@ -36,9 +36,10 @@ public class Enemycontrol  extends Component {
             String imagePath = "Avatar/2-Run/" + i + ".png";
             imagesRun.add(FXGL.getAssetLoader().loadImage(imagePath));
         }
-        animIdle = new AnimationChannel(imagesIdle,  Duration.seconds(0.5));
-        animWalk = new AnimationChannel(imagesRun,  Duration.seconds(0.5));
+        animIdle = new AnimationChannel(imagesIdle, Duration.seconds(0.5));
+        animWalk = new AnimationChannel(imagesRun, Duration.seconds(0.5));
     }
+
     @Override
     public void onUpdate(double tpf) {
         Entity player = getGameWorld().getSingleton(Types.PLAYER);
@@ -64,11 +65,13 @@ public class Enemycontrol  extends Component {
         isMoving = false;
         Entity weapon = getEntity().getComponent(PlayerWeaponComponent.class).getWeapon();
     }
+
     private void attackPlayer() {
         PlayerWeaponComponent weaponComponent = getEntity().getComponent(PlayerWeaponComponent.class);
         // Atacar al jugador con el arma
-        //no sabria como implementarlo
+        weaponComponent.attack();
     }
+
     private void moveToPlayer(Point2D playerPosition) {
         // Obtener la posición del enemigo
         Point2D enemyPosition = entity.getPosition();
@@ -78,4 +81,3 @@ public class Enemycontrol  extends Component {
         entity.translate(direction.multiply(100)); // Ajusta la velocidad de movimiento según tus necesidades
     }
 }
-
