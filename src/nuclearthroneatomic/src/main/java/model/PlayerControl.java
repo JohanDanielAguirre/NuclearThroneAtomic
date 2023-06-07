@@ -120,6 +120,9 @@ public class PlayerControl extends Component {
     }
 
     public void health(){
+        if(life==3){
+            return;
+        }
         if(medkits>0){
             life=3;
             --medkits;
