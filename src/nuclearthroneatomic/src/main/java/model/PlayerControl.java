@@ -26,7 +26,6 @@ public class PlayerControl extends Component {
     private BoundingBoxComponent bbox;
     private boolean isMoving;
     private boolean isFacingRight;
-
     private static int life=3;
 
     public static int getLife() {
@@ -42,6 +41,8 @@ public class PlayerControl extends Component {
     public static int getMedkits() {
         return medkits;
     }
+    private  long time = 0;
+
 
     public PlayerControl(AnimatedTexture texture) {
         this.bbox = new BoundingBoxComponent();
@@ -62,29 +63,6 @@ public class PlayerControl extends Component {
     }
     @Override
     public void onUpdate(double tpf) {
-
-        double screenWidth = getAppWidth();
-        double screenHeight = getAppHeight();
-
-        double minX = 0;
-        double minY = 0;
-        double maxX = screenWidth - entity.getWidth();
-        double maxY = screenHeight - entity.getHeight();
-
-        double playerX = entity.getX();
-        double playerY = entity.getY();
-
-        if (playerX < minX) {
-            entity.setX(minX);
-        } else if (playerX > maxX) {
-            entity.setX(maxX);
-        }
-
-        if (playerY < minY+40) {
-            entity.setY(minY+40);
-        } else if (playerY > maxY-40) {
-            entity.setY(maxY-40);
-        }
         if (isMoving) {
             if (!texture.getAnimationChannel().equals(animWalk)) {
                 texture.loopAnimationChannel(animWalk);
@@ -113,6 +91,9 @@ public class PlayerControl extends Component {
                 getGameWorld().addEntity(weapon);
             }
         }
+        if(System.currentTimeMillis()-time>7000){
+            life=3;
+        }
     }
     public void moveRight() {
         entity.translateX(5);
@@ -137,6 +118,21 @@ public class PlayerControl extends Component {
         entity.translateY(5);
         isMoving=true;
     }
+
+    public void health(){
+        if(medkits>0){
+            life=3;
+            --medkits;
+        }
+    }
+
+    public void lucky(){
+        if(lucky>0){
+            time=System.currentTimeMillis();
+            life=999999;
+            --lucky;
+        }
+    }
     public void reload() {
         getGameTimer().runOnceAfter(() -> {
             PlayerWeaponComponent weaponComponent= getEntity().getComponent(PlayerWeaponComponent.class);
@@ -160,11 +156,5 @@ public class PlayerControl extends Component {
             isFacingRight=false;
             texture.setScaleX(-1);
         }
-    }
-    public double getPosX(){
-        return entity.getX();
-    }
-    public double getPosY(){
-        return entity.getY();
     }
 }
