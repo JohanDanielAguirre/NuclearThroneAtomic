@@ -12,8 +12,6 @@ import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
@@ -39,6 +37,9 @@ public class GameFactory implements EntityFactory {
                 .with(new PlayerControl(texture))
                 .with(new PlayerWeaponComponent())
                 .with(new AmmoIndicatorComponent())
+                .with(new Lifeindicator())
+                .with(new medicnicator())
+                .with(new luckyindicatorComponent())
                 .build();
     }
 

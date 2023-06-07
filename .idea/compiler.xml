@@ -9,8 +9,5 @@
         <module name="nuclearthroneatomic" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="nuclearthroneatomic" target="18" />
-    </bytecodeTargetLevel>
   </component>
 </project>

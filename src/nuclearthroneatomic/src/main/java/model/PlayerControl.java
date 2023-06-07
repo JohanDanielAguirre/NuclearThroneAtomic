@@ -27,8 +27,21 @@ public class PlayerControl extends Component {
     private boolean isMoving;
     private boolean isFacingRight;
 
-    private int life;
+    private static int life=3;
 
+    public static int getLife() {
+        return life;
+    }
+    private static int lucky=1;
+
+    public static int getLucky() {
+        return lucky;
+    }
+    private static int medkits=3;
+
+    public static int getMedkits() {
+        return medkits;
+    }
 
     public PlayerControl(AnimatedTexture texture) {
         this.bbox = new BoundingBoxComponent();
