@@ -1,7 +1,9 @@
 package model;
 
+import com.almasb.fxgl.core.math.FXGLMath;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
+import com.almasb.fxgl.time.LocalTimer;
 import javafx.geometry.Point2D;
         import com.almasb.fxgl.dsl.FXGL;
         import com.almasb.fxgl.entity.Entity;
@@ -33,6 +35,9 @@ public class Enemycontrol  extends Component {
         return life;
     }
 
+    protected LocalTimer attackTimer;
+    protected Duration nextAttack = Duration.seconds(2);
+
 
     public Enemycontrol(AnimatedTexture texture) {
         this.bbox = new BoundingBoxComponent();
@@ -56,6 +61,8 @@ public class Enemycontrol  extends Component {
     public void onAdded() {
         EnemyWeaponComponent weaponComponent = entity.getComponent(EnemyWeaponComponent.class);
         weaponComponent.setWeapon(spawn("Weapon"));
+        attackTimer = FXGL.newLocalTimer();
+        attackTimer.capture();
     }
     @Override
     public void onUpdate(double tpf) {
@@ -68,7 +75,15 @@ public class Enemycontrol  extends Component {
             if (!texture.getAnimationChannel().equals(animIdle)) {
                 texture.loopAnimationChannel(animIdle);
             }
-            attackPlayer();
+            if (attackTimer.elapsed(nextAttack)) {
+                if (FXGLMath.randomBoolean(0.3f)){
+                    attackPlayer();
+                }
+                nextAttack = Duration.seconds(2 * Math.random());
+                attackTimer.capture();
+            }
+
+
         } else {
             isMoving = true;
             moveToPlayer(playerPosition);
@@ -104,7 +119,7 @@ public class Enemycontrol  extends Component {
         }
     }
 
-    private void attackPlayer() {
+    private void attackPlayer(){
             List<Entity> enemies = getGameWorld().getEntitiesByType(Types.ENEMY);
             Point2D playerPosition = getGameWorld().getSingleton(Types.PLAYER).getPosition();
 

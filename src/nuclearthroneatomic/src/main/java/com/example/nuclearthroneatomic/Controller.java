@@ -32,12 +32,10 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 
         private ArrayList<Entity> enemies=new ArrayList<>();
         public static boolean isRealoding;
-
-        private Music music;
+        public static boolean portalSpawned = false;
+        public static boolean nextLevel = false;
 
         private int level = 1;
-
-        long time = System.currentTimeMillis();
 
         @Override
         protected void initSettings(GameSettings settings) {
@@ -82,6 +80,8 @@ import static com.almasb.fxgl.dsl.FXGL.*;
                     Types.PLAYER,
                     Types.PORTAL
             ).forEach(Entity::removeFromWorld);
+
+            enemies.clear();
         }
 
         private void loadLevel(){
@@ -90,7 +90,7 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 
             switch (level){
                 case 1:
-                    player = spawn("Avatar", getAppWidth() / 2 - 15, getAppHeight() / 2 - 15);
+                    player = spawn("Avatar", getAppWidth() / 2 - 5, getAppHeight() / 2 - 5);
                     spawn("Weapon");
                     for (int i = 0; i < 3; i++) {
                         enemies.add(spawn("enemy"));
@@ -99,21 +99,21 @@ import static com.almasb.fxgl.dsl.FXGL.*;
                     FXGL.getGameScene().getRoot().setCursor(customCursor);
                     break;
                 case 2:
-                    player = spawn("Avatar", getAppWidth() / 2 - 15, getAppHeight() / 2 - 15);
+                    player = spawn("Avatar", getAppWidth() / 2 - 5, getAppHeight() / 2 - 5);
                     spawn("Weapon2");
 
                     for (int i = 0; i < 6; i++) {
-                        spawn("enemy");
+                        enemies.add(spawn("enemy"));
                     }
 
                     break;
                 case 3:
-                    player = spawn("Avatar", getAppWidth() / 2 - 15, getAppHeight() / 2 - 15);
+                    player = spawn("Avatar", getAppWidth() / 2 - 5, getAppHeight() / 2 - 5);
                     spawn("Weapon");
                     spawn("Weapon2");
 
                     for (int i = 0; i < 12; i++) {
-                        spawn("enemy");
+                        enemies.add(spawn("enemy"));
                     }
 
                     break;
@@ -194,6 +194,7 @@ import static com.almasb.fxgl.dsl.FXGL.*;
                    TypeBullet typeBullet= bullet.getComponent(BulletComponent.class).getTypeBullet();
                    if(typeBullet==TypeBullet.ENEMY){
                        PlayerControl.setLife(PlayerControl.getLife()-1);
+                       bullet.removeFromWorld();
                    }
                 }
             });
@@ -210,6 +211,13 @@ import static com.almasb.fxgl.dsl.FXGL.*;
                             }
                         }
                     }
+                }
+            });
+
+            getPhysicsWorld().addCollisionHandler(new CollisionHandler(Types.PLAYER, Types.PORTAL){
+                @Override
+                protected void onCollision(Entity player, Entity portal){
+                    nextLevel = true;
                 }
             });
         }
@@ -290,10 +298,38 @@ import static com.almasb.fxgl.dsl.FXGL.*;
             }, MouseButton.PRIMARY);
         }
 
+        private void showGameOver() {
+            getDialogService().showConfirmationBox("Game Over. Play Again?", yes -> {
+                if (yes) {
+                    cleanUpLevel();
+                    level = 1;
+                    loadLevel();
+                } else {
+                    getGameController().exit();
+                }
+            });
+        }
+
 
         @Override
         protected void onUpdate(double tpf) {
             //Pasar de nivel por el portal,se hace por medio de una colision
+
+            if (PlayerControl.getLife()<= 0){
+                showGameOver();
+            }
+
+            if (getGameWorld().getEntitiesByType(Types.ENEMY).size() == 0 && !portalSpawned){
+                spawn("Portal");
+                portalSpawned = true;
+            }
+
+            if (nextLevel){
+                cleanUpLevel();
+                level++;
+                nextLevel = false;
+                loadLevel();
+            }
         }
 
         public static void main(String[] args) {
