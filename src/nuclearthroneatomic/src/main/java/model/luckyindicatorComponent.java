@@ -38,5 +38,8 @@ public class luckyindicatorComponent extends Component {
         lifeaccount = PlayerControl.getLucky();
         text.setText("X " + lifeaccount);
     }
+    public void clearUI() {
+        getGameScene().removeUINodes(luckytexture,text);
+    }
 }
 

@@ -66,4 +66,7 @@ public class AmmoIndicatorComponent extends Component {
             text.setText("X " + 0);
         }
     }
+    public void clearUI() {
+        getGameScene().removeUINodes(ammoTexture,text);
+    }
 }

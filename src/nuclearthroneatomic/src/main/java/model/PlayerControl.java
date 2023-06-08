@@ -45,8 +45,15 @@ public class PlayerControl extends Component {
     public static int getMedkits() {
         return medkits;
     }
-    private  long time = 0;
 
+    public static void setLucky(int lucky) {
+        PlayerControl.lucky = lucky;
+    }
+
+    private  long time = 0;
+    public static void setMedkits(int medkits) {
+        PlayerControl.medkits = medkits;
+    }
 
     public PlayerControl(AnimatedTexture texture) {
         this.bbox = new BoundingBoxComponent();
@@ -167,7 +174,7 @@ public class PlayerControl extends Component {
             if(!Controller.isRealoding){
                 return;
             }
-            PlayerWeaponComponent weaponComponent= getEntity().getComponent(PlayerWeaponComponent.class);
+            PlayerWeaponComponent weaponComponent= entity.getComponent(PlayerWeaponComponent.class);
             if(weaponComponent.getWeapon().getComponent(WeaponComponent.class).getName().equals("MachineGun")){
                 weaponComponent.setAmmoCount(10);
             }
