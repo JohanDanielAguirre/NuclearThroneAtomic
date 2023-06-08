@@ -17,13 +17,13 @@ public class luckyindicatorComponent extends Component {
     public void onAdded() {
         text=new Text();
         luckytexture = FXGL.getAssetLoader().loadTexture("hud/trebol.png");
-        luckytexture.setTranslateX(positionX-600);
-        luckytexture.setTranslateY(positionY-600);
-        luckytexture.setScaleX(0.08);
-        luckytexture.setScaleY(0.08);
+        luckytexture.setTranslateX(positionX-40);
+        luckytexture.setTranslateY(positionY+3);
+        luckytexture.setScaleX(0.4);
+        luckytexture.setScaleY(0.4);
         text.setFill(Color.BLACK);
-        text.setTranslateX(positionX + 20);
-        text.setTranslateY(positionY +35);
+        text.setTranslateX(positionX + 50);
+        text.setTranslateY(positionY +58);
         text.setFont(Font.font(30));
         getGameScene().addUINode(luckytexture);
         getGameScene().addUINode(text);
@@ -35,18 +35,8 @@ public class luckyindicatorComponent extends Component {
     }
     private void updatelucky() {
         int lifeaccount;
-        PlayerControl playerControl = FXGL.getGameWorld()
-                .getSingleton(Types.PLAYER)
-                .getComponent(PlayerControl.class);
-        luckytexture.dispose();
-        luckytexture = FXGL.getAssetLoader().loadTexture("hud/trebol.png");
-        luckytexture.setScaleX(0.08);
-        luckytexture.setScaleY(0.08);
-        luckytexture.setTranslateX(positionX-460);
-        luckytexture.setTranslateY(positionY-425);
-        getGameScene().addUINode(luckytexture);
         lifeaccount = PlayerControl.getLucky();
         text.setText("X " + lifeaccount);
-
     }
 }
+

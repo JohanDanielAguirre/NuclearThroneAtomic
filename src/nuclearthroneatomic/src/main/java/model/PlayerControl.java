@@ -26,7 +26,7 @@ public class PlayerControl extends Component {
     private BoundingBoxComponent bbox;
     private boolean isMoving;
     private boolean isFacingRight;
-    private static int life=3;
+    private static int life=1;
 
     public static int getLife() {
         return life;
@@ -63,6 +63,28 @@ public class PlayerControl extends Component {
     }
     @Override
     public void onUpdate(double tpf) {
+        double screenWidth = getAppWidth();
+        double screenHeight = getAppHeight();
+
+        double minX = 0;
+        double minY = 0;
+        double maxX = screenWidth - entity.getWidth();
+        double maxY = screenHeight - entity.getHeight();
+
+        double playerX = entity.getX();
+        double playerY = entity.getY();
+
+        if (playerX < minX) {
+            entity.setX(minX);
+        } else if (playerX > maxX) {
+            entity.setX(maxX);
+        }
+
+        if (playerY < minY+30) {
+            entity.setY(minY+30);
+        } else if (playerY > maxY-40) {
+            entity.setY(maxY-40);
+        }
         if (isMoving) {
             if (!texture.getAnimationChannel().equals(animWalk)) {
                 texture.loopAnimationChannel(animWalk);
@@ -91,9 +113,6 @@ public class PlayerControl extends Component {
                 getGameWorld().addEntity(weapon);
             }
         }
-        if(System.currentTimeMillis()-time>7000){
-            life=3;
-        }
     }
     public void moveRight() {
         entity.translateX(5);
@@ -119,21 +138,24 @@ public class PlayerControl extends Component {
         isMoving=true;
     }
 
-    public void health(){
-        if(life==3){
+    public void health() {
+        if (life >= 3) {
             return;
         }
-        if(medkits>0){
-            life=3;
+
+        if (medkits > 0) {
+            life++;
             --medkits;
         }
     }
 
-    public void lucky(){
-        if(lucky>0){
-            time=System.currentTimeMillis();
-            life=999999;
+    public void lucky() {
+        if (lucky > 0) {
+            life = 999;
             --lucky;
+            getGameTimer().runOnceAfter(() -> {
+                life = 3;
+            }, javafx.util.Duration.seconds(5));
         }
     }
     public void reload() {

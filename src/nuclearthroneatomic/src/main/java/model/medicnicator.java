@@ -17,13 +17,13 @@ public class medicnicator extends Component {
     public void onAdded() {
         text=new Text();
         medictexture = FXGL.getAssetLoader().loadTexture("hud/medkit.png");
-        medictexture.setTranslateX(positionX-600);
-        medictexture.setTranslateY(positionY-600);
-        medictexture.setScaleX(0.08);
-        medictexture.setScaleY(0.08);
+        medictexture.setTranslateX(positionX-50);
+        medictexture.setTranslateY(positionY-20);
+        medictexture.setScaleX(0.4);
+        medictexture.setScaleY(0.4);
         text.setFill(Color.BLACK);
-        text.setTranslateX(positionX + 20);
-        text.setTranslateY(positionY +35);
+        text.setTranslateX(positionX + 50);
+        text.setTranslateY(positionY +40);
         text.setFont(Font.font(30));
         getGameScene().addUINode(medictexture);
         getGameScene().addUINode(text);
@@ -35,17 +35,8 @@ public class medicnicator extends Component {
     }
     private void updatelucky() {
         int lifeaccount;
-        PlayerControl playerControl = FXGL.getGameWorld()
-                .getSingleton(Types.PLAYER)
-                .getComponent(PlayerControl.class);
-        medictexture.dispose();
-        medictexture = FXGL.getAssetLoader().loadTexture("hud/medkit.png");
-        medictexture.setScaleX(0.08);
-        medictexture.setScaleY(0.08);
-        medictexture.setTranslateX(positionX-460);
-        medictexture.setTranslateY(positionY-425);
-        getGameScene().addUINode(medictexture);
         lifeaccount = PlayerControl.getMedkits();
         text.setText("X " + lifeaccount);
     }
 }
+
