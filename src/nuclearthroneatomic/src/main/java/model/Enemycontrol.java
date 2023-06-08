@@ -1,6 +1,7 @@
 package model;
 
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.entity.SpawnData;
 import javafx.geometry.Point2D;
         import com.almasb.fxgl.dsl.FXGL;
         import com.almasb.fxgl.entity.Entity;
@@ -39,7 +40,7 @@ public class Enemycontrol  extends Component {
         animIdle = new AnimationChannel(imagesIdle, Duration.seconds(0.5));
         animWalk = new AnimationChannel(imagesRun, Duration.seconds(0.5));
     }
-
+    /*
     @Override
     public void onUpdate(double tpf) {
         Entity player = getGameWorld().getSingleton(Types.PLAYER);
@@ -67,9 +68,22 @@ public class Enemycontrol  extends Component {
     }
 
     private void attackPlayer() {
-        PlayerWeaponComponent weaponComponent = getEntity().getComponent(PlayerWeaponComponent.class);
-        // Atacar al jugador con el arma
-        weaponComponent.attack();
+
+        // Obtener la posición del enemigo
+        Entity enemy = getEntity();
+        Point2D enemyPosition = enemy.getPosition();
+
+        // Obtener la posición actual del jugador
+        Point2D playerPosition = getGameWorld().getSingleton(Types.PLAYER).getPosition();
+
+        // Calcular la dirección del enemigo hacia la posición del jugador
+        Point2D direction = playerPosition.subtract(enemyPosition).normalize();
+
+        // Crear y spawnear una nueva bala
+        Entity bullet = FXGL.spawn("Bullet",
+                new SpawnData(enemyPosition)
+                        .put("direction", direction));
+
     }
 
     private void moveToPlayer(Point2D playerPosition) {
@@ -80,4 +94,6 @@ public class Enemycontrol  extends Component {
         // Mover al enemigo en la dirección del jugador
         entity.translate(direction.multiply(100)); // Ajusta la velocidad de movimiento según tus necesidades
     }
+
+     */
 }

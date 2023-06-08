@@ -67,12 +67,21 @@ public class GameFactory implements EntityFactory {
     }
     @Spawns("enemy")
     public Entity newEnemy(SpawnData data) {
+        var images = new ArrayList<Image>();
+        for (int i = 1; i <= 4; i++) {
+            String imagePath = "enemy/1-Idle/" + i + ".png";
+            images.add(FXGL.getAssetLoader().loadImage(imagePath));
+        }
+        var channel = new AnimationChannel(images, Duration.seconds(0.5));
+        AnimatedTexture texture = new AnimatedTexture(channel);
+
         return entityBuilder()
                 .type(Types.ENEMY)
-                .viewWithBBox("enemy.png")
-                .scale(0.15,0.15)
+                .viewWithBBox(texture.loop())
+                .scale(3,3)
                 .with(new CollidableComponent(true))
                 .with(new OffscreenCleanComponent())
+                .with(new Enemycontrol(texture))
                 .at(random(0,500),random(0,500))
                 .build();
     }
@@ -135,13 +144,21 @@ public class GameFactory implements EntityFactory {
     }
 
     @Spawns("Portal")
-    private static Entity spawnPortal(SpawnData data){
-        String imagePath = "Portal/portal.png";
+    public Entity spawnPortal(SpawnData data){
+        var images = new ArrayList<Image>();
+        for (int i = 1; i <= 4; i++) {
+            String imagePath = "portal/" + i + ".png";
+            images.add(FXGL.getAssetLoader().loadImage(imagePath));
+        }
+        var channel = new AnimationChannel(images, Duration.seconds(0.5));
+        AnimatedTexture texture = new AnimatedTexture(channel);
+
        return entityBuilder()
                .type(Types.PORTAL)
-               .viewWithBBox(imagePath)
-               .at(getAppWidth() / 2 - 75, getAppHeight() / 2 - 75)
+               .viewWithBBox(texture.loop())
+               .at(0, 0)
                .scale(0.15,0.15)
+               .with(new PortalControl(texture))
                .with(new CollidableComponent(true))
                .build();
     }

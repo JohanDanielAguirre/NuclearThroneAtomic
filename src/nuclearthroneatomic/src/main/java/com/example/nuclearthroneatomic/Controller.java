@@ -39,11 +39,10 @@ import static com.almasb.fxgl.dsl.FXGL.*;
                 case 1:
                     player = spawn("Avatar", getAppWidth() / 2 - 15, getAppHeight() / 2 - 15);
                     spawn("Weapon");
-
                     for (int i = 0; i < 3; i++) {
                         spawn("enemy");
                     }
-
+                    spawn("Portal");
                     break;
                 case 2:
                     player = spawn("Avatar", getAppWidth() / 2 - 15, getAppHeight() / 2 - 15);
@@ -181,7 +180,7 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 
         @Override
         protected void onUpdate(double tpf) {
-            if
+
         }
 
         public static void main(String[] args) {
