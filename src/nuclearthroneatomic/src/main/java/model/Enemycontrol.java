@@ -61,6 +61,7 @@ public class Enemycontrol  extends Component {
     public void onAdded() {
         EnemyWeaponComponent weaponComponent = entity.getComponent(EnemyWeaponComponent.class);
         weaponComponent.setWeapon(spawn("Weapon"));
+        weaponComponent.getWeapon().getComponent(WeaponComponent.class).setEnemy(entity);
         attackTimer = FXGL.newLocalTimer();
         attackTimer.capture();
     }

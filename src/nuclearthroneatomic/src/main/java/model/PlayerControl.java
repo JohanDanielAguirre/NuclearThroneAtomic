@@ -164,6 +164,9 @@ public class PlayerControl extends Component {
     }
     public void reload() {
         getGameTimer().runOnceAfter(() -> {
+            if(!Controller.isRealoding){
+                return;
+            }
             PlayerWeaponComponent weaponComponent= getEntity().getComponent(PlayerWeaponComponent.class);
             if(weaponComponent.getWeapon().getComponent(WeaponComponent.class).getName().equals("MachineGun")){
                 weaponComponent.setAmmoCount(10);
