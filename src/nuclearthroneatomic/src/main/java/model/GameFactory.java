@@ -205,6 +205,16 @@ public class GameFactory implements EntityFactory {
         return createBackgroundEntity("Background/libraryYesOMG.png");
     }
 
+    @Spawns("BackgroundLevel2")
+    public Entity spawnBackground2(SpawnData data){
+        return createBackgroundEntity("Background/blue.png");
+    }
+
+    @Spawns("BackgroundLevel3")
+    public Entity spawnBackground3(SpawnData data){
+        return createBackgroundEntity("Background/NuclearBG2.png");
+    }
+
 
     private Entity createBackgroundEntity(String imagePath) {
         return entityBuilder()

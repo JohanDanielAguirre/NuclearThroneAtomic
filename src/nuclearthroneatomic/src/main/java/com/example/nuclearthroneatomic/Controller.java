@@ -69,7 +69,7 @@ import static com.almasb.fxgl.dsl.FXGL.*;
         @Override
         protected void initGame() {
             getGameWorld().addEntityFactory(gameFactory);
-            spawn("BackgroundLevel1");
+
             loadLevel();
         }
 
@@ -91,28 +91,33 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 
             switch (level){
                 case 1:
+                    spawn("BackgroundLevel1");
                     player = spawn("Avatar", getAppWidth() / 2 - 5, getAppHeight() / 2 - 5);
                     spawn("Weapon2");
                     for (int i = 0; i < 3; i++) {
                         enemies.add(spawn("enemy"));
                     }
-                    customCursor = new ImageCursor(FXGL.getAssetLoader().loadImage("mouse/mousecomplete.png"));
+                    customCursor = new ImageCursor(FXGL.getAssetLoader().loadImage("mouse/mouseprefirstlevelboss.png"));
                     FXGL.getGameScene().getRoot().setCursor(customCursor);
                     break;
                 case 2:
+                    spawn("BackgroundLevel2");
                     player = spawn("Avatar", getAppWidth() / 2 - 5, getAppHeight() / 2 - 5);
                     spawn("Weapon");
-
+                    customCursor = new ImageCursor(FXGL.getAssetLoader().loadImage("mouse/mousepresecondlevel.png"));
+                    FXGL.getGameScene().getRoot().setCursor(customCursor);
                     for (int i = 0; i < 6; i++) {
                         enemies.add(spawn("enemy"));
                     }
 
                     break;
                 case 3:
+                    spawn("BackgroundLevel3");
                     player = spawn("Avatar", getAppWidth() / 2 - 5, getAppHeight() / 2 - 5);
                     spawn("Weapon");
                     spawn("Weapon2");
-
+                    customCursor = new ImageCursor(FXGL.getAssetLoader().loadImage("mouse/mouseprefinallevel.png"));
+                    FXGL.getGameScene().getRoot().setCursor(customCursor);
                     for (int i = 0; i < 12; i++) {
                         enemies.add(spawn("enemy"));
                     }
@@ -187,6 +192,25 @@ import static com.almasb.fxgl.dsl.FXGL.*;
                 protected void onCollision(Entity player, Entity wall) {
                     player.setX(prevX);
                     player.setY(prevY);
+                }
+            });
+
+            getPhysicsWorld().addCollisionHandler(new CollisionHandler(Types.ENEMY,Types.ENEMY) {
+                private double prevX;
+                private double prevY;
+
+
+                @Override
+                protected void onCollisionBegin(Entity enemy, Entity enemy1) {
+                    prevX = enemy.getX();
+                    prevY = enemy.getY();
+
+                }
+
+                @Override
+                protected void onCollision(Entity enemy, Entity enemy1) {
+                    enemy.setX(prevX);
+                    enemy.setY(prevY);
                 }
             });
             getPhysicsWorld().addCollisionHandler(new CollisionHandler(Types.PLAYER, Types.BULLET) {
