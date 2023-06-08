@@ -91,7 +91,7 @@ import static com.almasb.fxgl.dsl.FXGL.*;
             switch (level){
                 case 1:
                     player = spawn("Avatar", getAppWidth() / 2 - 5, getAppHeight() / 2 - 5);
-                    spawn("Weapon");
+                    spawn("Weapon2");
                     for (int i = 0; i < 3; i++) {
                         enemies.add(spawn("enemy"));
                     }
@@ -100,7 +100,7 @@ import static com.almasb.fxgl.dsl.FXGL.*;
                     break;
                 case 2:
                     player = spawn("Avatar", getAppWidth() / 2 - 5, getAppHeight() / 2 - 5);
-                    spawn("Weapon2");
+                    spawn("Weapon");
 
                     for (int i = 0; i < 6; i++) {
                         enemies.add(spawn("enemy"));
@@ -118,7 +118,7 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 
                     break;
                 default:
-                   // uWin();
+                   uWin();
                     break;
             }
 
@@ -139,9 +139,9 @@ import static com.almasb.fxgl.dsl.FXGL.*;
                     int ammoCount = 0;
                     String weaponName = weapon.getComponent(WeaponComponent.class).getName();
                     if (weaponName.equals("MachineGun")) {
-                        ammoCount = 10;
+                        ammoCount = 12;
                     } else if (weaponName.equals("Sniper")) {
-                        ammoCount = 3;
+                        ammoCount = 5;
                     }
                     weaponComponent.setAmmoCount(ammoCount);
                 }
@@ -300,6 +300,18 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 
         private void showGameOver() {
             getDialogService().showConfirmationBox("Game Over. Play Again?", yes -> {
+                if (yes) {
+                    cleanUpLevel();
+                    level = 1;
+                    loadLevel();
+                } else {
+                    getGameController().exit();
+                }
+            });
+        }
+
+        private void uWin() {
+            getDialogService().showConfirmationBox("You win-You must love the competition before you can achieve victory. Play Again?", yes -> {
                 if (yes) {
                     cleanUpLevel();
                     level = 1;

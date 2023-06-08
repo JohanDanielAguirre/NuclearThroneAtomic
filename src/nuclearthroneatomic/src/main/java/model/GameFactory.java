@@ -59,7 +59,7 @@ public class GameFactory implements EntityFactory {
     @Spawns("Weapon2")
     public Entity newWeapon2(SpawnData data) {
         String weaponName="Sniper";
-        return createWeaponEntity("Guns/2.png",weaponName,3);
+        return createWeaponEntity("Guns/2.png",weaponName,5);
     }
 
     private Entity createWeaponEntity(String imagePath, String weaponName,int ammo) {
