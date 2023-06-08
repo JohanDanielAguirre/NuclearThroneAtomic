@@ -134,5 +134,17 @@ public class GameFactory implements EntityFactory {
         return wall;
     }
 
+    @Spawns("Portal")
+    private static Entity spawnPortal(SpawnData data){
+        String imagePath = "Portal/portal.png";
+       return entityBuilder()
+               .type(Types.PORTAL)
+               .viewWithBBox(imagePath)
+               .at(getAppWidth() / 2 - 75, getAppHeight() / 2 - 75)
+               .scale(0.15,0.15)
+               .with(new CollidableComponent(true))
+               .build();
+    }
+
 
 }

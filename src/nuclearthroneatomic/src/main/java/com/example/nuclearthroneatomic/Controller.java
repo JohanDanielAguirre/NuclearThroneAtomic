@@ -14,6 +14,9 @@ import static com.almasb.fxgl.dsl.FXGL.*;
         private final GameFactory gameFactory = new GameFactory();
         private Entity player;
         public static boolean isRealoding;
+
+        private int level = 1;
+
         @Override
         protected void initSettings(GameSettings settings) {
             settings.setTitle("Nuclear Throne Atomic");
@@ -25,10 +28,47 @@ import static com.almasb.fxgl.dsl.FXGL.*;
         @Override
         protected void initGame() {
             getGameWorld().addEntityFactory(gameFactory);
-            player = spawn("Avatar", getAppWidth() / 2 - 15, getAppHeight() / 2 - 15);
-            spawn("Weapon");
-            spawn("Weapon2");
-            spawn("enemy");
+            loadLevel();
+        }
+
+        private void loadLevel(){
+
+            getGameWorld().getEntities().forEach(Entity::removeFromWorld);
+
+            switch (level){
+                case 1:
+                    player = spawn("Avatar", getAppWidth() / 2 - 15, getAppHeight() / 2 - 15);
+                    spawn("Weapon");
+
+                    for (int i = 0; i < 3; i++) {
+                        spawn("enemy");
+                    }
+
+                    break;
+                case 2:
+                    player = spawn("Avatar", getAppWidth() / 2 - 15, getAppHeight() / 2 - 15);
+                    spawn("Weapon2");
+
+                    for (int i = 0; i < 6; i++) {
+                        spawn("enemy");
+                    }
+
+                    break;
+                case 3:
+                    player = spawn("Avatar", getAppWidth() / 2 - 15, getAppHeight() / 2 - 15);
+                    spawn("Weapon");
+                    spawn("Weapon2");
+
+                    for (int i = 0; i < 12; i++) {
+                        spawn("enemy");
+                    }
+
+                    break;
+                default:
+                   // uWin();
+                    break;
+            }
+
             GameFactory.generateSurroundingWalls();
         }
         @Override
@@ -138,6 +178,12 @@ import static com.almasb.fxgl.dsl.FXGL.*;
                 }
             }, MouseButton.PRIMARY);
         }
+
+        @Override
+        protected void onUpdate(double tpf) {
+            if
+        }
+
         public static void main(String[] args) {
             launch(args);
         }
