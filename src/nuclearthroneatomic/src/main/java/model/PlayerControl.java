@@ -174,7 +174,7 @@ public class PlayerControl extends Component {
             if(!Controller.isRealoding){
                 return;
             }
-            PlayerWeaponComponent weaponComponent= getEntity().getComponent(PlayerWeaponComponent.class);
+            PlayerWeaponComponent weaponComponent= entity.getComponent(PlayerWeaponComponent.class);
             if(weaponComponent.getWeapon().getComponent(WeaponComponent.class).getName().equals("MachineGun")){
                 weaponComponent.setAmmoCount(10);
             }

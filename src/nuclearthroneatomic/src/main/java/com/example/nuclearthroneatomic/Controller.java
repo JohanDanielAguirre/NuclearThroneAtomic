@@ -369,7 +369,7 @@ import static com.almasb.fxgl.dsl.FXGL.*;
         }
 
         private void showGameOver() {
-            getDialogService().showConfirmationBox("Game Over: "+ frase() +"\n Play Again?", yes -> {
+            getDialogService().showConfirmationBox("Game Over: "+frase() +"\n Play Again?", yes -> {
                 if (yes) {
                     PlayerControl.setLife(3);
                     cleanUpLevel();
@@ -382,7 +382,7 @@ import static com.almasb.fxgl.dsl.FXGL.*;
         }
 
         private void uWin() {
-            getDialogService().showConfirmationBox("You win: "+ frase() +"Play Again?", yes -> {
+            getDialogService().showConfirmationBox("You win: Sos el mejor" +"Play Again?", yes -> {
                 if (yes) {
                     PlayerControl.setLife(3);
                     cleanUpLevel();
