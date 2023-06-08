@@ -194,24 +194,6 @@ import static com.almasb.fxgl.dsl.FXGL.*;
                 }
             });
 
-            getPhysicsWorld().addCollisionHandler(new CollisionHandler(Types.ENEMY,Types.ENEMY) {
-                private double prevX;
-                private double prevY;
-
-
-                @Override
-                protected void onCollisionBegin(Entity enemy, Entity enemy1) {
-                    prevX = enemy.getX();
-                    prevY = enemy.getY();
-
-                }
-
-                @Override
-                protected void onCollision(Entity enemy, Entity enemy1) {
-                    enemy.setX(prevX);
-                    enemy.setY(prevY);
-                }
-            });
             getPhysicsWorld().addCollisionHandler(new CollisionHandler(Types.PLAYER, Types.BULLET) {
                 @Override
                 protected void onCollision(Entity player, Entity bullet) {
