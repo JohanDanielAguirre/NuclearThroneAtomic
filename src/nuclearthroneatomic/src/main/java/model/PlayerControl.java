@@ -26,7 +26,7 @@ public class PlayerControl extends Component {
     private BoundingBoxComponent bbox;
     private boolean isMoving;
     private boolean isFacingRight;
-    private static int life=1;
+    private static int life=3;
 
     public static int getLife() {
         return life;
