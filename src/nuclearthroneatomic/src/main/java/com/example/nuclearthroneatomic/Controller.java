@@ -53,6 +53,7 @@ import static com.almasb.fxgl.dsl.FXGL.*;
                     "El mas lindo . . . . . . Juan Sebastián Libreros",
                     "Master Thief . . . . . . Johan Daniel Aguirre"
             ));
+            settings.setFullScreenFromStart(true);
         }
 
         @Override
@@ -68,7 +69,7 @@ import static com.almasb.fxgl.dsl.FXGL.*;
         @Override
         protected void initGame() {
             getGameWorld().addEntityFactory(gameFactory);
-
+            spawn("BackgroundLevel1");
             loadLevel();
         }
 
@@ -298,9 +299,63 @@ import static com.almasb.fxgl.dsl.FXGL.*;
             }, MouseButton.PRIMARY);
         }
 
+        public String frase(){
+            String m;
+            int a= (int) (Math.random() * 14);
+            switch(a){
+                case 1:
+                    m="No hay nada más emocionante que te disparen y no te den.";
+                    break;
+                case 2:
+                    m="Hasta un ejercito de mil hombres cae cuando un hombre piensa como mil de ellos";
+                    break;
+                case 3:
+                    m="Esos salvajes murieron duramente, como lobos heridos y acorralados. Eran sucios, ruidosos y olían. Y yo los quería.";
+                    break;
+                case 4:
+                    m="La muerte de un hombre es una tragedia. La muerte de millones es estadística.";
+                    break;
+                case 5:
+                    m="No dependas de nadie en este mundo... Porque hasta tu propia sombra te abandona en la oscuridad.";
+                    break;
+                case 6:
+                    m="El hombre adecuado en el sitio equivocado puede cambiar el rumbo del mundo.";
+                    break;
+                case 7:
+                    m="Debemos luchar por los que viven y por los que aún no han nacido.";
+                    break;
+                case 8:
+                    m="Un hombre elige, un esclavo obedece.";
+                    break;
+                case 9:
+                    m="Si de verdad existe el mal en este mundo, éste reside en el mismo corazón del hombre.";
+                    break;
+                case 10:
+                    m="Si la historia debe cambiar, que cambie. Si el mundo es destruido, que así sea. Si mi destino es morir, simplemente me reiré de él.";
+                    break;
+                case 11:
+                    m="Nadie es innecesario.";
+                    break;
+                case 12:
+                    m="¡Es mejor morir de pie que vivir de rodillas!";
+                    break;
+                case 13:
+                    m="Lo correcto... ¿Qué es? Si haces lo correcto... ¿Haces... feliz... a todo el mundo?";
+                    break;
+                case 14:
+                    m="No importa cuán oscura que sea la noche, el día siempre vuelve a aparecer y nuestro viaje comienza una vez más.";
+                    break;
+                default:
+                    m="¡Detras de ti imbecil!";
+                    break;
+            }
+            return m;
+        }
+
         private void showGameOver() {
-            getDialogService().showConfirmationBox("Game Over. Play Again?", yes -> {
+            getDialogService().showConfirmationBox("Game Over: "+ frase() +"Play Again?", yes -> {
                 if (yes) {
+                    PlayerControl.setLife(3);
                     cleanUpLevel();
                     level = 1;
                     loadLevel();
@@ -311,8 +366,9 @@ import static com.almasb.fxgl.dsl.FXGL.*;
         }
 
         private void uWin() {
-            getDialogService().showConfirmationBox("You win-You must love the competition before you can achieve victory. Play Again?", yes -> {
+            getDialogService().showConfirmationBox("You win: "+ frase() +"Play Again?", yes -> {
                 if (yes) {
+                    PlayerControl.setLife(3);
                     cleanUpLevel();
                     level = 1;
                     loadLevel();
@@ -337,10 +393,12 @@ import static com.almasb.fxgl.dsl.FXGL.*;
             }
 
             if (nextLevel){
+                portalSpawned = false;
                 cleanUpLevel();
                 level++;
                 nextLevel = false;
                 loadLevel();
+
             }
         }
 

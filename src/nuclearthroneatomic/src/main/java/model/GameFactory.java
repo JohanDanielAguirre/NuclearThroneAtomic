@@ -199,4 +199,19 @@ public class GameFactory implements EntityFactory {
                .with(new CollidableComponent(true))
                .build();
     }
+
+    @Spawns("BackgroundLevel1")
+    public Entity spawnBackground(SpawnData data){
+        return createBackgroundEntity("Background/libraryYesOMG.png");
+    }
+
+
+    private Entity createBackgroundEntity(String imagePath) {
+        return entityBuilder()
+                .type(Types.BACKGROUND)
+                .scale(3,3.5)
+                .viewWithBBox(imagePath)
+                .at(getAppWidth() / 2 - 75, getAppHeight() / 2 - 75)
+                .build();
+    }
 }
