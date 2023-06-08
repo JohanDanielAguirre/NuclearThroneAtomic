@@ -13,8 +13,9 @@ import javafx.geometry.Point2D;
         import javafx.scene.image.Image;
         import javafx.util.Duration;
         import java.util.ArrayList;
-        import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameWorld;
-        import static com.almasb.fxgl.dsl.FXGLForKtKt.getInput;
+import java.util.List;
+
+import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
 
 public class Enemycontrol  extends Component {
     private AnimationChannel animIdle, animWalk;
@@ -22,11 +23,21 @@ public class Enemycontrol  extends Component {
     private BoundingBoxComponent bbox;
     private boolean isMoving;
     private boolean isFacingRight;
-    private static int life = 3;
+
+    private int life = 3;
+    public  void setLife() {
+        life--;
+    }
+
+    public int getLife() {
+        return life;
+    }
+
 
     public Enemycontrol(AnimatedTexture texture) {
         this.bbox = new BoundingBoxComponent();
         this.texture = texture;
+
         var imagesIdle = new ArrayList<Image>();
         for (int i = 1; i <= 4; i++) {
             String imagePath = "enemy/1-Idle/" + i + ".png";
@@ -42,63 +53,82 @@ public class Enemycontrol  extends Component {
     }
 
     @Override
+    public void onAdded() {
+        EnemyWeaponComponent weaponComponent = entity.getComponent(EnemyWeaponComponent.class);
+        weaponComponent.setWeapon(spawn("Weapon"));
+    }
+    @Override
     public void onUpdate(double tpf) {
         Entity player = getGameWorld().getSingleton(Types.PLAYER);
         Point2D playerPosition = player.getPosition();
         Point2D enemyPosition = entity.getPosition();
         double distance = enemyPosition.distance(playerPosition);
-        if (distance <= 100) { // Ajusta el valor de distancia según tus necesidades
-            // Atacar al jugador
-            //attackPlayer();
+        if (distance <= 150) { // Ajusta el valor de distancia según tus necesidades
             isMoving = false;
+            if (!texture.getAnimationChannel().equals(animIdle)) {
+                texture.loopAnimationChannel(animIdle);
+            }
+            attackPlayer();
         } else {
             isMoving = true;
-            // Moverse hacia el jugador
             moveToPlayer(playerPosition);
         }
+        Entity weapon = getEntity().getComponent(EnemyWeaponComponent.class).getWeapon();
+        if (weapon != null) {
+            playerPosition = getGameWorld().getSingleton(Types.PLAYER).getPosition();
+            enemyPosition = getEntity().getPosition();
 
-       // Entity weapon = getEntity().getComponent(PlayerWeaponComponent.class).getWeapon();
+            Point2D direction = playerPosition.subtract(enemyPosition).normalize();
+
+            double rotationRadians = Math.atan2(direction.getY(), direction.getX());
+            double rotationDegrees = Math.toDegrees(rotationRadians);
+
+            weapon.setPosition(enemyPosition.subtract(265, 60));
+            weapon.setRotation(rotationDegrees);
+
+            if(direction.getX()<0){
+                weapon.rotateBy(180);
+                weapon.setScaleX(-0.15);
+            }
+            else{
+                weapon.setScaleX(0.15);
+            }
+
+            if (!getGameWorld().getEntities().contains(weapon)) {
+                getGameWorld().addEntity(weapon);
+            }
+            if(getLife()<=0){
+                entity.getComponent(EnemyWeaponComponent.class).getWeapon().removeFromWorld();
+                entity.removeFromWorld();
+            }
+        }
     }
 
     private void attackPlayer() {
+            List<Entity> enemies = getGameWorld().getEntitiesByType(Types.ENEMY);
+            Point2D playerPosition = getGameWorld().getSingleton(Types.PLAYER).getPosition();
 
-        // Obtener la posición del enemigo
-        Entity enemy = getEntity();
-        Point2D enemyPosition = enemy.getPosition();
+        for (int i = 0; i < enemies.size(); i++) {
+            Entity enemy = enemies.get(i);
+            Point2D enemyPosition = enemy.getPosition();
+            Point2D direction = playerPosition.subtract(enemyPosition).normalize();
 
-        // Obtener la posición actual del jugador
-        Point2D playerPosition = getGameWorld().getSingleton(Types.PLAYER).getPosition();
-
-        // Calcular la dirección del enemigo hacia la posición del jugador
-        Point2D direction = playerPosition.subtract(enemyPosition).normalize();
-
-        // Crear y spawnear una nueva bala
-        Entity bullet = FXGL.spawn("Bullet",
-                new SpawnData(enemyPosition)
-                        .put("direction", direction));
-
+            SpawnData spawnData = new SpawnData();
+            spawnData.put("direction", direction);
+            spawnData.put("weapon",enemy.getComponent(EnemyWeaponComponent.class).getWeapon());
+            enemy.getComponent(EnemyWeaponComponent.class).getWeapon().getComponent(WeaponComponent.class).setBullet(spawn("EnemyBullet", spawnData));
+        }
+        
     }
 
-
-
     private void moveToPlayer(Point2D playerPosition) {
-        // Obtener la posición del enemigo
         Point2D enemyPosition = entity.getPosition();
         // Calcular la dirección hacia el jugador
         Point2D direction = playerPosition.subtract(enemyPosition).normalize();
         // Mover al enemigo en la dirección del jugador
         entity.translate(direction.multiply(2.5)); // Ajusta la velocidad de movimiento según tus necesidades
-
-        if (isMoving) {
             if (!texture.getAnimationChannel().equals(animWalk)) {
                 texture.loopAnimationChannel(animWalk);
             }
-        } else {
-            if (!texture.getAnimationChannel().equals(animIdle)) {
-                texture.loopAnimationChannel(animIdle);
-            }
-        }
     }
-
-
 }

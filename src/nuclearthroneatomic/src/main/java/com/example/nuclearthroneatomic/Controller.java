@@ -9,10 +9,15 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import model.*;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 import static com.almasb.fxgl.dsl.FXGL.*;
     public class Controller extends GameApplication {
         private final GameFactory gameFactory = new GameFactory();
         private Entity player;
+
+        private ArrayList<Entity> enemies=new ArrayList<>();
         public static boolean isRealoding;
 
         private int level = 1;
@@ -40,7 +45,7 @@ import static com.almasb.fxgl.dsl.FXGL.*;
                     player = spawn("Avatar", getAppWidth() / 2 - 15, getAppHeight() / 2 - 15);
                     spawn("Weapon");
                     for (int i = 0; i < 3; i++) {
-                        spawn("enemy");
+                        enemies.add(spawn("enemy"));
                     }
                     spawn("Portal");
                     break;
@@ -75,6 +80,11 @@ import static com.almasb.fxgl.dsl.FXGL.*;
             getPhysicsWorld().addCollisionHandler(new CollisionHandler(Types.PLAYER, Types.WEAPON) {
                 @Override
                 protected void onCollisionBegin(Entity player, Entity weapon) {
+                    for (int i = 0; i < enemies.size(); i++) {
+                        if (enemies.get(i).getComponent(EnemyWeaponComponent.class).getWeapon().equals(weapon)) {
+                            return;
+                        }
+                    }
                     PlayerWeaponComponent weaponComponent = player.getComponent(PlayerWeaponComponent.class);
                     weaponComponent.setWeapon(weapon);
                     int ammoCount = 0;
@@ -90,39 +100,69 @@ import static com.almasb.fxgl.dsl.FXGL.*;
             getPhysicsWorld().addCollisionHandler(new CollisionHandler(Types.BULLET, Types.WALL) {
                 @Override
                 protected void onCollisionBegin(Entity bullet, Entity wall) {
+                    TypeBullet typeBullet = bullet.getComponent(BulletComponent.class).getTypeBullet();
+                    if (typeBullet == TypeBullet.ENEMY) {
+                        getGameWorld().removeEntity(bullet);
+                        return;
+                    }
+
                     getGameWorld().removeEntity(wall);
                     getGameWorld().removeEntity(bullet);
                 }
             });
-                getPhysicsWorld().addCollisionHandler(new CollisionHandler(Types.PLAYER, Types.WALL) {
-                    private double prevX;
-                    private double prevY;
+            getPhysicsWorld().addCollisionHandler(new CollisionHandler(Types.PLAYER, Types.WALL) {
+                private double prevX;
+                private double prevY;
 
-                    @Override
-                    protected void onCollisionBegin(Entity player, Entity wall) {
-                       prevX= player.getX();
-                       prevY = player.getY();
+                @Override
+                protected void onCollisionBegin(Entity player, Entity wall) {
+                    prevX = player.getX();
+                    prevY = player.getY();
 
-                        if(player.getY()<51){ //Colision arriba
-                            prevY+=5;
-                        }
-                        if(player.getX()<51){ //Colision izquierda
-                            prevX +=5;
-                        }
-                        if(player.getY()>480){ //Colision abajo
-                            prevY -=5;
-                        }
-                        if(player.getX()>690){ //Colision derecha
-                            prevX -=5;
+                    if (player.getY() < 51) { //Colision arriba
+                        prevY += 5;
+                    }
+                    if (player.getX() < 51) { //Colision izquierda
+                        prevX += 5;
+                    }
+                    if (player.getY() > 480) { //Colision abajo
+                        prevY -= 5;
+                    }
+                    if (player.getX() > 690) { //Colision derecha
+                        prevX -= 5;
+                    }
+                }
+
+                @Override
+                protected void onCollision(Entity player, Entity wall) {
+                    player.setX(prevX);
+                    player.setY(prevY);
+                }
+            });
+            getPhysicsWorld().addCollisionHandler(new CollisionHandler(Types.PLAYER, Types.BULLET) {
+                @Override
+                protected void onCollision(Entity player, Entity bullet) {
+                   TypeBullet typeBullet= bullet.getComponent(BulletComponent.class).getTypeBullet();
+                   if(typeBullet==TypeBullet.ENEMY){
+                       PlayerControl.setLife(PlayerControl.getLife()-1);
+                   }
+                }
+            });
+            getPhysicsWorld().addCollisionHandler(new CollisionHandler(Types.ENEMY, Types.BULLET) {
+                @Override
+                protected void onCollision(Entity enemy, Entity bullet) {
+                    TypeBullet typeBullet = bullet.getComponent(BulletComponent.class).getTypeBullet();
+                    if (typeBullet == TypeBullet.PLAYER) {
+                        for (int i = 0; i < enemies.size(); i++) {
+                            if (enemies.get(i).equals(enemy)) {
+                                enemies.get(i).getComponent(Enemycontrol.class).setLife();
+                                bullet.removeFromWorld();
+                                return;
+                            }
                         }
                     }
-
-                    @Override
-                    protected void onCollision(Entity player, Entity wall) {
-                        player.setX(prevX);
-                        player.setY(prevY);
-                    }
-                });
+                }
+            });
         }
         @Override
         protected void initInput() {
@@ -200,6 +240,7 @@ import static com.almasb.fxgl.dsl.FXGL.*;
                 }
             }, MouseButton.PRIMARY);
         }
+
 
         @Override
         protected void onUpdate(double tpf) {
