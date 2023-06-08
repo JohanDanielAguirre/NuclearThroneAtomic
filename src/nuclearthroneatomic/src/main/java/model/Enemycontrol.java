@@ -49,15 +49,13 @@ public class Enemycontrol  extends Component {
         double distance = enemyPosition.distance(playerPosition);
         if (distance <= 100) { // Ajusta el valor de distancia según tus necesidades
             // Atacar al jugador
-            //attackPlayer();
-            isMoving = false;
+            attackPlayer();
         } else {
-            isMoving = true;
             // Moverse hacia el jugador
             moveToPlayer(playerPosition);
         }
 
-       // Entity weapon = getEntity().getComponent(PlayerWeaponComponent.class).getWeapon();
+       //Entity weapon = getEntity().getComponent(PlayerWeaponComponent.class).getWeapon();
     }
 
     private void attackPlayer() {
@@ -71,11 +69,13 @@ public class Enemycontrol  extends Component {
 
         // Calcular la dirección del enemigo hacia la posición del jugador
         Point2D direction = playerPosition.subtract(enemyPosition).normalize();
-
+        /*
         // Crear y spawnear una nueva bala
         Entity bullet = FXGL.spawn("Bullet",
                 new SpawnData(enemyPosition)
                         .put("direction", direction));
+
+         */
 
     }
 

@@ -2,18 +2,30 @@ package com.example.nuclearthroneatomic;
 
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
+import com.almasb.fxgl.app.MenuItem;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.physics.CollisionHandler;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import model.*;
+import com.almasb.fxgl.audio.Music;
+
+
+import java.lang.reflect.Array;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
+import java.util.Arrays;
+import java.util.EnumSet;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
     public class Controller extends GameApplication {
         private final GameFactory gameFactory = new GameFactory();
         private Entity player;
         public static boolean isRealoding;
+
+        private Music music;
 
         private int level = 1;
 
@@ -24,7 +36,27 @@ import static com.almasb.fxgl.dsl.FXGL.*;
             settings.setGameMenuEnabled(true);
             //settings.setIntroEnabled(true);
             settings.setFullScreenAllowed(true);
+            settings.setEnabledMenuItems(EnumSet.of(MenuItem.EXTRA));
+            settings.getCredits().addAll(Arrays.asList(
+                    "Designer . . . . . . . Johan Daniel Aguirre",
+                    "Program Team . . . . . . Juan Sebastián Libreros",
+                    "                          Juan Jose Barrera",
+                    "                          Johan Daniel Aguirre",
+                    "El mas lindo . . . . . . Juan Sebastián Libreros",
+                    "Master Thief . . . . . . Johan Daniel Aguirre"
+            ));
         }
+
+        @Override
+        protected void onPreInit() {
+            getSettings().setGlobalSoundVolume(0.1);
+            getSettings().setGlobalMusicVolume(1.0);
+            String uri = "musicformenus.mp3";
+           loopBGM(uri);
+
+        }
+
+
         @Override
         protected void initGame() {
             getGameWorld().addEntityFactory(gameFactory);
