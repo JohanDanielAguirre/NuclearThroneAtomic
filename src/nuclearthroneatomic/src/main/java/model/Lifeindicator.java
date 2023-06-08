@@ -19,13 +19,13 @@ public class Lifeindicator extends Component {
     public void onAdded() {
         text=new Text();
         lifetexture = FXGL.getAssetLoader().loadTexture("hud/lifeplayer.png");
-        lifetexture.setTranslateX(positionX-600);
-        lifetexture.setTranslateY(positionY-600);
-        lifetexture.setScaleX(0.08);
-        lifetexture.setScaleY(0.08);
+        lifetexture.setTranslateX(positionX-180);
+        lifetexture.setTranslateY(positionY-150);
+        lifetexture.setScaleX(0.1);
+        lifetexture.setScaleY(0.1);
         text.setFill(Color.BLACK);
-        text.setTranslateX(positionX + 20);
-        text.setTranslateY(positionY +35);
+        text.setTranslateX(positionX + 60);
+        text.setTranslateY(positionY +60);
         text.setFont(Font.font(30));
         getGameScene().addUINode(lifetexture);
         getGameScene().addUINode(text);
@@ -40,14 +40,7 @@ public class Lifeindicator extends Component {
         PlayerControl playerControl = FXGL.getGameWorld()
                 .getSingleton(Types.PLAYER)
                 .getComponent(PlayerControl.class);
-            lifetexture.dispose();
-                lifetexture = FXGL.getAssetLoader().loadTexture("hud/lifeplayer.png");
-                lifetexture.setScaleX(0.08);
-                lifetexture.setScaleY(0.08);
-                lifetexture.setTranslateX(positionX-460);
-                lifetexture.setTranslateY(positionY-425);
-                getGameScene().addUINode(lifetexture);
-            lifeaccount = PlayerControl.getLife();
-            text.setText("X " + lifeaccount);
+        lifeaccount = playerControl.getLife();
+        text.setText("X " + lifeaccount);
     }
 }

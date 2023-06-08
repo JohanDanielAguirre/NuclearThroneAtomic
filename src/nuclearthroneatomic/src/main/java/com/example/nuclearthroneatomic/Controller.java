@@ -126,27 +126,50 @@ import static com.almasb.fxgl.dsl.FXGL.*;
                     getGameWorld().removeEntity(bullet);
                 }
             });
-            getPhysicsWorld().addCollisionHandler(new CollisionHandler(Types.WALL, Types.PLAYER) {
-                @Override
-                protected void onCollisionBegin(Entity player, Entity wall) {
-                }
-            });
+                getPhysicsWorld().addCollisionHandler(new CollisionHandler(Types.PLAYER, Types.WALL) {
+                    private double prevX;
+                    private double prevY;
+
+                    @Override
+                    protected void onCollisionBegin(Entity player, Entity wall) {
+                       prevX= player.getX();
+                       prevY = player.getY();
+
+                        if(player.getY()<51){ //Colision arriba
+                            prevY+=5;
+                        }
+                        if(player.getX()<51){ //Colision izquierda
+                            prevX +=5;
+                        }
+                        if(player.getY()>480){ //Colision abajo
+                            prevY -=5;
+                        }
+                        if(player.getX()>690){ //Colision derecha
+                            prevX -=5;
+                        }
+                    }
+
+                    @Override
+                    protected void onCollision(Entity player, Entity wall) {
+                        player.setX(prevX);
+                        player.setY(prevY);
+                    }
+                });
         }
         @Override
         protected void initInput() {
-
-            getInput().addAction(new UserAction("lucky") {
-                @Override
-                protected void onAction() {
-                    player.getComponent(PlayerControl.class).lucky();
-                }
-            }, KeyCode.Q);
-            getInput().addAction(new UserAction("health") {
-                @Override
-                protected void onAction() {
-                    player.getComponent(PlayerControl.class).health();
-                }
-            }, KeyCode.F);
+                getInput().addAction(new UserAction("lucky") {
+                    @Override
+                    protected void onAction() {
+                        player.getComponent(PlayerControl.class).lucky();
+                    }
+                }, KeyCode.Q);
+                getInput().addAction(new UserAction("health") {
+                    @Override
+                    protected void onActionBegin() {
+                        player.getComponent(PlayerControl.class).health();
+                    }
+                }, KeyCode.F);
             getInput().addAction(new UserAction("Right") {
                 @Override
                 protected void onAction() {

@@ -8,6 +8,8 @@ import com.almasb.fxgl.entity.EntityFactory;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.Spawns;
 import com.almasb.fxgl.entity.components.CollidableComponent;
+import com.almasb.fxgl.physics.BoundingShape;
+import com.almasb.fxgl.physics.HitBox;
 import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
 import javafx.geometry.Point2D;
@@ -62,7 +64,7 @@ public class GameFactory implements EntityFactory {
                 .viewWithBBox(imagePath)
                 .with(new CollidableComponent(true))
                 .with(new WeaponComponent(weaponName,ammo))
-                .at(random(0,500),random(0,500))
+                .at(random(0,425),random(0,425))
                 .build();
     }
     @Spawns("enemy")
@@ -115,33 +117,43 @@ public class GameFactory implements EntityFactory {
     }
 
     public static void generateSurroundingWalls() {
-        int screenWidth = getAppWidth()-25;
-        int screenHeight = getAppHeight()-25;
+        int screenWidth = getAppWidth();
+        int screenHeight = getAppHeight();
 
         double wallWidth = 30.0;
 
-        for (double y = -5; y <= screenHeight; y += wallWidth) {
-            spawnWall(-5, y, wallWidth, wallWidth); // Lado izquierdo
-            spawnWall(screenWidth - wallWidth, y, wallWidth, wallWidth); // Lado derecho
+
+        for (double y = -275; y <= screenHeight; y += wallWidth) {
+            spawnWall(-275, y,40,20); // Lado izquierdo
+            spawnWall(475, y,300,100); // Lado derecho
         }
 
-        for (double x = -5; x <= screenWidth; x += wallWidth) {
-            spawnWall(x, -5, wallWidth, wallWidth); // Parte superior
-            spawnWall(x, screenHeight - wallWidth, wallWidth, wallWidth); // Parte inferior
+        for (double x = -275; x <= screenWidth; x += wallWidth) {
+            spawnWall(x, -275,50,100); // Parte superior
+            spawnWall(x, 275,250,0); // Parte inferior
         }
     }
+
     @Spawns("Wall")
-    private static Entity spawnWall(double x, double y, double width, double height) {
+    private static Entity spawnWall(double x, double y,double hitBoxX, double hitBoxY) {
         Entity wall = entityBuilder()
                 .type(Types.WALL)
                 .at(x, y)
-                .view("Wall/1.png")
-                .scale(0.1,0.1)
+                .viewWithBBox("Wall/1.png")
+                .scale(0.1, 0.1)
                 .with(new CollidableComponent(true))
                 .build();
+
+        double hitboxWidth = 300;
+        double hitboxHeight = 300;
+
+        wall.getBoundingBoxComponent().clearHitBoxes(); // Elimina todas las hitboxes existentes
+        wall.getBoundingBoxComponent().addHitBox(new HitBox(new Point2D(hitBoxX, hitBoxY), BoundingShape.box(hitboxWidth, hitboxHeight)));
+
         getGameWorld().addEntity(wall);
+
         return wall;
-    }
+}
 
     @Spawns("Portal")
     public Entity spawnPortal(SpawnData data){

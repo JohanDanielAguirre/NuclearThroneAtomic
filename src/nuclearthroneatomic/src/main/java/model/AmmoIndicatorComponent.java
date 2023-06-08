@@ -20,14 +20,14 @@ public class AmmoIndicatorComponent extends Component {
     public void onAdded() {
         text=new Text();
         ammoTexture = FXGL.getAssetLoader().loadTexture("Munition/1.png");
-        ammoTexture.setTranslateX(positionX-460);
-        ammoTexture.setTranslateY(positionY-425);
+        ammoTexture.setTranslateX(positionX-425);
+        ammoTexture.setTranslateY(positionY-400);
         ammoTexture.setScaleX(0.08);
         ammoTexture.setScaleY(0.08);
 
         text.setFill(Color.BLACK);
-        text.setTranslateX(positionX + 20);
-        text.setTranslateY(positionY +35);
+        text.setTranslateX(positionX + 60);
+        text.setTranslateY(positionY +60);
         text.setFont(Font.font(30));
 
         getGameScene().addUINode(ammoTexture);
@@ -44,20 +44,20 @@ public class AmmoIndicatorComponent extends Component {
                 .getSingleton(Types.PLAYER)
                 .getComponent(PlayerWeaponComponent.class);
         if (weaponComponent != null && weaponComponent.getWeapon() != null) {
-                ammoTexture.dispose();
+            ammoTexture.dispose();
             if (weaponComponent.getWeapon().getComponent(WeaponComponent.class).getName().equals("MachineGun")) {
                 ammoTexture = FXGL.getAssetLoader().loadTexture("Munition/1.png");
                 ammoTexture.setScaleX(0.08);
                 ammoTexture.setScaleY(0.08);
-                ammoTexture.setTranslateX(positionX-460);
-                ammoTexture.setTranslateY(positionY-425);
+                ammoTexture.setTranslateX(positionX-425);
+                ammoTexture.setTranslateY(positionY-400);
                 getGameScene().addUINode(ammoTexture);
             } else {
                 ammoTexture = FXGL.getAssetLoader().loadTexture("Munition/2.png");
                 ammoTexture.setScaleX(2);
                 ammoTexture.setScaleY(2);
-                ammoTexture.setTranslateX(positionX-20);
-                ammoTexture.setTranslateY(positionY+13);
+                ammoTexture.setTranslateX(positionX+20);
+                ammoTexture.setTranslateY(positionY+40);
                 getGameScene().addUINode(ammoTexture);
             }
             ammoCount = weaponComponent.getAmmoCount();
