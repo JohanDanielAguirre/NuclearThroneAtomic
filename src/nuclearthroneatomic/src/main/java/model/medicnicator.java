@@ -38,5 +38,8 @@ public class medicnicator extends Component {
         lifeaccount = PlayerControl.getMedkits();
         text.setText("X " + lifeaccount);
     }
+    public void clearUI() {
+        getGameScene().removeUINodes(medictexture,text);
+    }
 }
 

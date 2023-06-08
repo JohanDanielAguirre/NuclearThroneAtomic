@@ -81,8 +81,23 @@ import static com.almasb.fxgl.dsl.FXGL.*;
                     Types.PLAYER,
                     Types.PORTAL
             ).forEach(Entity::removeFromWorld);
+            AmmoIndicatorComponent ammoIndicatorComponent = player.getComponent(AmmoIndicatorComponent.class);
+            luckyindicatorComponent luckyComponent = player.getComponent(luckyindicatorComponent.class);
+            medicnicator medicineIndicator = player.getComponent(medicnicator.class);
+            Lifeindicator lifeindicator = player.getComponent(Lifeindicator.class);
+            if (ammoIndicatorComponent != null) {
+                ammoIndicatorComponent.clearUI();
+            }
+            if(luckyComponent!=null){
+                luckyComponent.clearUI();
+            }
+            if (medicineIndicator!=null){
+                medicineIndicator.clearUI();
+            }
+            if(lifeindicator!=null){
+                lifeindicator.clearUI();
+            }
             isRealoding=false;
-
             enemies.clear();
         }
 
@@ -97,6 +112,8 @@ import static com.almasb.fxgl.dsl.FXGL.*;
                     for (int i = 0; i < 3; i++) {
                         enemies.add(spawn("enemy"));
                     }
+                    PlayerControl.setMedkits(3);
+                    PlayerControl.setLucky(1);
                     customCursor = new ImageCursor(FXGL.getAssetLoader().loadImage("mouse/mousecomplete.png"));
                     FXGL.getGameScene().getRoot().setCursor(customCursor);
                     break;
@@ -306,31 +323,31 @@ import static com.almasb.fxgl.dsl.FXGL.*;
                     m="No hay nada más emocionante que te disparen y no te den.";
                     break;
                 case 2:
-                    m="Hasta un ejercito de mil hombres cae cuando un hombre piensa como mil de ellos";
+                    m="Hasta un ejercito de mil hombres cae\n cuando un hombre piensa como mil de ellos";
                     break;
                 case 3:
-                    m="Esos salvajes murieron duramente, como lobos heridos y acorralados. Eran sucios, ruidosos y olían. Y yo los quería.";
+                    m="Esos salvajes murieron duramente, como lobos heridos y acorralados.\n Eran sucios, ruidosos y olían. Y yo los quería.";
                     break;
                 case 4:
-                    m="La muerte de un hombre es una tragedia. La muerte de millones es estadística.";
+                    m="La muerte de un hombre es una tragedia.\n La muerte de millones es estadística.";
                     break;
                 case 5:
-                    m="No dependas de nadie en este mundo... Porque hasta tu propia sombra te abandona en la oscuridad.";
+                    m="No dependas de nadie en este mundo...\n Porque hasta tu propia sombra te abandona en la oscuridad.";
                     break;
                 case 6:
-                    m="El hombre adecuado en el sitio equivocado puede cambiar el rumbo del mundo.";
+                    m="El hombre adecuado en el sitio equivocado\n puede cambiar el rumbo del mundo.";
                     break;
                 case 7:
-                    m="Debemos luchar por los que viven y por los que aún no han nacido.";
+                    m="Debemos luchar por los que viven\n y por los que aún no han nacido.";
                     break;
                 case 8:
                     m="Un hombre elige, un esclavo obedece.";
                     break;
                 case 9:
-                    m="Si de verdad existe el mal en este mundo, éste reside en el mismo corazón del hombre.";
+                    m="Si de verdad existe el mal en este mundo,\n éste reside en el mismo corazón del hombre.";
                     break;
                 case 10:
-                    m="Si la historia debe cambiar, que cambie. Si el mundo es destruido, que así sea. Si mi destino es morir, simplemente me reiré de él.";
+                    m="Si la historia debe cambiar, que cambie. Si el mundo es destruido, que así sea.\n Si mi destino es morir, simplemente me reiré de él.";
                     break;
                 case 11:
                     m="Nadie es innecesario.";
@@ -339,20 +356,20 @@ import static com.almasb.fxgl.dsl.FXGL.*;
                     m="¡Es mejor morir de pie que vivir de rodillas!";
                     break;
                 case 13:
-                    m="Lo correcto... ¿Qué es? Si haces lo correcto... ¿Haces... feliz... a todo el mundo?";
+                    m="Adios... Mundo cruel";
                     break;
                 case 14:
-                    m="No importa cuán oscura que sea la noche, el día siempre vuelve a aparecer y nuestro viaje comienza una vez más.";
+                    m="No importa cuán oscura que sea la noche, el día siempre vuelve a aparecer\n y nuestro viaje comienza una vez más.";
                     break;
                 default:
-                    m="¡Detras de ti imbecil!";
+                    m="¡Detras de ti Comediante!";
                     break;
             }
             return m;
         }
 
         private void showGameOver() {
-            getDialogService().showConfirmationBox("Game Over: "+ frase() +"Play Again?", yes -> {
+            getDialogService().showConfirmationBox("Game Over: "+ frase() +"\n Play Again?", yes -> {
                 if (yes) {
                     PlayerControl.setLife(3);
                     cleanUpLevel();

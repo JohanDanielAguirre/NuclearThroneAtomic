@@ -43,4 +43,7 @@ public class Lifeindicator extends Component {
         lifeaccount = playerControl.getLife();
         text.setText("X " + lifeaccount);
     }
+    public void clearUI() {
+        getGameScene().removeUINodes(lifetexture,text);
+    }
 }
