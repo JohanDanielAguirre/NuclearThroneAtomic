@@ -9,9 +9,19 @@ public class WeaponComponent extends Component {
     private Entity bullet;
     public static boolean isReloading;
 
+    private Entity enemy;
+
     public WeaponComponent(String name, int ammo) {
         this.ammo = ammo;
         this.name = name;
+    }
+
+    public Entity getEnemy() {
+        return enemy;
+    }
+
+    public void setEnemy(Entity enemy) {
+        this.enemy = enemy;
     }
 
     public String getName() {

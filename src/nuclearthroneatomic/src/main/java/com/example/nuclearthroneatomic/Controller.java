@@ -81,6 +81,7 @@ import static com.almasb.fxgl.dsl.FXGL.*;
                     Types.PLAYER,
                     Types.PORTAL
             ).forEach(Entity::removeFromWorld);
+            isRealoding=false;
 
             enemies.clear();
         }
@@ -135,10 +136,8 @@ import static com.almasb.fxgl.dsl.FXGL.*;
             getPhysicsWorld().addCollisionHandler(new CollisionHandler(Types.PLAYER, Types.WEAPON) {
                 @Override
                 protected void onCollisionBegin(Entity player, Entity weapon) {
-                    for (int i = 0; i < enemies.size(); i++) {
-                        if (enemies.get(i).getComponent(EnemyWeaponComponent.class).getWeapon().equals(weapon)) {
-                            return;
-                        }
+                    if (weapon.getComponent(WeaponComponent.class).getEnemy() != null) {
+                        return;
                     }
                     PlayerWeaponComponent weaponComponent = player.getComponent(PlayerWeaponComponent.class);
                     weaponComponent.setWeapon(weapon);
