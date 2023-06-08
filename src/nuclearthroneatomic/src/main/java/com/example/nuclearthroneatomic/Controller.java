@@ -22,7 +22,7 @@ import static com.almasb.fxgl.dsl.FXGL.*;
             settings.setTitle("Nuclear Throne Atomic");
             settings.setMainMenuEnabled(true);
             settings.setGameMenuEnabled(true);
-            settings.setIntroEnabled(true);
+            //settings.setIntroEnabled(true);
             settings.setFullScreenAllowed(true);
         }
         @Override
