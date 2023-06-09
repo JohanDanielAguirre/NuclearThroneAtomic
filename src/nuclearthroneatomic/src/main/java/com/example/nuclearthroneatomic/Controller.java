@@ -3,14 +3,18 @@ package com.example.nuclearthroneatomic;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.MenuItem;
+import com.almasb.fxgl.core.math.FXGLMath;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.GameWorld;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.physics.CollisionHandler;
+import com.almasb.fxgl.time.LocalTimer;
+import javafx.geometry.Point2D;
 import javafx.scene.ImageCursor;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
+import javafx.util.Duration;
 import model.*;
 import com.almasb.fxgl.audio.Music;
 
@@ -36,6 +40,11 @@ import static com.almasb.fxgl.dsl.FXGL.*;
         public static boolean nextLevel = false;
 
         private int level = 1;
+
+        private int bulletsEnemies = 0;
+
+        protected LocalTimer attackTimer;
+        protected Duration nextAttack = Duration.seconds(2);
 
         @Override
         protected void initSettings(GameSettings settings) {
@@ -79,9 +88,12 @@ import static com.almasb.fxgl.dsl.FXGL.*;
                     Types.ENEMY,
                     Types.WALL,
                     Types.PLAYER,
-                    Types.PORTAL
+                    Types.PORTAL,
+                    Types.BULLET,
+                    Types.BACKGROUND
             ).forEach(Entity::removeFromWorld);
             AmmoIndicatorComponent ammoIndicatorComponent = player.getComponent(AmmoIndicatorComponent.class);
+            WeaponIndicator weaponIndicator = player.getComponent(WeaponIndicator.class);
             luckyindicatorComponent luckyComponent = player.getComponent(luckyindicatorComponent.class);
             medicnicator medicineIndicator = player.getComponent(medicnicator.class);
             Lifeindicator lifeindicator = player.getComponent(Lifeindicator.class);
@@ -97,6 +109,9 @@ import static com.almasb.fxgl.dsl.FXGL.*;
             if(lifeindicator!=null){
                 lifeindicator.clearUI();
             }
+            if (weaponIndicator != null){
+                weaponIndicator.clearUI();
+            }
             isRealoding=false;
             enemies.clear();
         }
@@ -110,6 +125,12 @@ import static com.almasb.fxgl.dsl.FXGL.*;
                     spawn("BackgroundLevel1");
                     player = spawn("Avatar", getAppWidth() / 2 - 5, getAppHeight() / 2 - 5);
                     spawn("Weapon2");
+
+                    GameFactory.generateWall(100,125,200,50);
+                    GameFactory.generateWall(200,125,200,50);
+                    GameFactory.generateWall(100,425,200,50);
+                    GameFactory.generateWall(200,525,200,50);
+
                     for (int i = 0; i < 3; i++) {
                         enemies.add(spawn("enemy"));
                     }
@@ -122,6 +143,8 @@ import static com.almasb.fxgl.dsl.FXGL.*;
                     spawn("BackgroundLevel2");
                     player = spawn("Avatar", getAppWidth() / 2 - 5, getAppHeight() / 2 - 5);
                     spawn("Weapon");
+                    PlayerControl.setMedkits(3);
+                    PlayerControl.setLucky(1);
                     customCursor = new ImageCursor(FXGL.getAssetLoader().loadImage("mouse/mousepresecondlevel.png"));
                     FXGL.getGameScene().getRoot().setCursor(customCursor);
                     for (int i = 0; i < 6; i++) {
@@ -134,6 +157,8 @@ import static com.almasb.fxgl.dsl.FXGL.*;
                     player = spawn("Avatar", getAppWidth() / 2 - 5, getAppHeight() / 2 - 5);
                     spawn("Weapon");
                     spawn("Weapon2");
+                    PlayerControl.setMedkits(3);
+                    PlayerControl.setLucky(1);
                     customCursor = new ImageCursor(FXGL.getAssetLoader().loadImage("mouse/mouseprefinallevel.png"));
                     FXGL.getGameScene().getRoot().setCursor(customCursor);
                     for (int i = 0; i < 12; i++) {
@@ -173,6 +198,7 @@ import static com.almasb.fxgl.dsl.FXGL.*;
                 protected void onCollisionBegin(Entity bullet, Entity wall) {
                     TypeBullet typeBullet = bullet.getComponent(BulletComponent.class).getTypeBullet();
                     if (typeBullet == TypeBullet.ENEMY) {
+                        getGameWorld().removeEntity(wall);
                         getGameWorld().removeEntity(bullet);
                         return;
                     }
@@ -208,6 +234,8 @@ import static com.almasb.fxgl.dsl.FXGL.*;
                 protected void onCollision(Entity player, Entity wall) {
                     player.setX(prevX);
                     player.setY(prevY);
+
+
                 }
             });
 
@@ -243,6 +271,51 @@ import static com.almasb.fxgl.dsl.FXGL.*;
                     nextLevel = true;
                 }
             });
+
+            getPhysicsWorld().addCollisionHandler(new CollisionHandler(Types.ENEMY, Types.WALL) {
+                private double prevX;
+                private double prevY;
+
+
+                @Override
+                protected void onCollisionBegin(Entity enemy, Entity wall) {
+                    prevX = enemy.getX();
+                    prevY = enemy.getY();
+
+                    attackTimer = FXGL.newLocalTimer();
+                    attackTimer.capture();
+
+                    if (enemy.getY() < 51) { //Colision arriba
+                        prevY += 5;
+                    }
+                    if (enemy.getX() < 51) { //Colision izquierda
+                        prevX += 5;
+                    }
+                    if (enemy.getY() > 480) { //Colision abajo
+                        prevY -= 5;
+                    }
+                    if (enemy.getX() > 690) { //Colision derecha
+                        prevX -= 5;
+                    }
+                }
+
+                @Override
+                protected void onCollision(Entity enemy, Entity wall) {
+
+                    enemy.setX(prevX);
+                    enemy.setY(prevY);
+                    if (attackTimer.elapsed(nextAttack)) {
+                        if (FXGLMath.randomBoolean(0.3f)){
+                            enemy.getComponent(Enemycontrol.class).attackPlayer();
+                        }
+                        nextAttack = Duration.seconds(2 * Math.random());
+                        attackTimer.capture();
+                    }
+
+                }
+            });
+
+
         }
         @Override
         protected void initInput() {

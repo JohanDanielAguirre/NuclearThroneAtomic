@@ -47,6 +47,7 @@ public class GameFactory implements EntityFactory {
                 .with(new Lifeindicator())
                 .with(new medicnicator())
                 .with(new luckyindicatorComponent())
+                .with(new WeaponIndicator())
                 .build();
         return entity;
     }
@@ -90,7 +91,7 @@ public class GameFactory implements EntityFactory {
                 .with(new OffscreenCleanComponent())
                 .with(new EnemyWeaponComponent())
                 .with(new Enemycontrol(texture))
-                .at(random(0,500),random(0,500))
+                .at(random(100,450),random(100,450))
                 .build();
     }
     @Spawns("Bullet")
@@ -157,6 +158,10 @@ public class GameFactory implements EntityFactory {
             spawnWall(x, -275,50,100); // Parte superior
             spawnWall(x, 275,250,0); // Parte inferior
         }
+    }
+
+    public static void generateWall(double x, double y,double hitBoxX, double hitBoxY){
+        spawnWall(x,y,hitBoxX,hitBoxY);
     }
 
     @Spawns("Wall")

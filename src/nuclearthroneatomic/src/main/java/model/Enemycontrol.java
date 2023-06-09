@@ -77,7 +77,7 @@ public class Enemycontrol  extends Component {
                 texture.loopAnimationChannel(animIdle);
             }
             if (attackTimer.elapsed(nextAttack)) {
-                if (FXGLMath.randomBoolean(0.3f)){
+                if (FXGLMath.randomBoolean(0.5f)){
                     attackPlayer();
                 }
                 nextAttack = Duration.seconds(2 * Math.random());
@@ -120,7 +120,7 @@ public class Enemycontrol  extends Component {
         }
     }
 
-    private void attackPlayer(){
+    public void attackPlayer(){
             List<Entity> enemies = getGameWorld().getEntitiesByType(Types.ENEMY);
             Point2D playerPosition = getGameWorld().getSingleton(Types.PLAYER).getPosition();
 
@@ -137,7 +137,14 @@ public class Enemycontrol  extends Component {
         
     }
 
-    private void moveToPlayer(Point2D playerPosition) {
+    public void destroyWall(Point2D direction,Entity enemy){
+        SpawnData spawnData = new SpawnData();
+        spawnData.put("direction", direction);
+        spawnData.put("weapon",enemy.getComponent(EnemyWeaponComponent.class).getWeapon());
+        enemy.getComponent(EnemyWeaponComponent.class).getWeapon().getComponent(WeaponComponent.class).setBullet(spawn("EnemyBullet", spawnData));
+    }
+
+    public void moveToPlayer(Point2D playerPosition) {
         Point2D enemyPosition = entity.getPosition();
         // Calcular la dirección hacia el jugador
         Point2D direction = playerPosition.subtract(enemyPosition).normalize();
